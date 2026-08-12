@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Anicca Yoga</title>
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#152230" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Anicca Yoga" />
+
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New&display=swap" rel="stylesheet" />
+
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #152230;
+    color: #E9DEC0;
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mincho { font-family: 'Shippori Mincho', serif; }
+  #app {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .screen { display: none; flex-direction: column; align-items: center; gap: 24px; max-width: 420px; width: 100%; }
+  .screen.active { display: flex; }
+
+  h1.title { font-size: 34px; letter-spacing: 0.15em; margin: 0; }
+  .subtitle { color: #9FB0A6; font-size: 14px; margin: 0; }
+
+  button.plain { background: none; border: none; padding: 0; cursor: pointer; }
+
+  .enter-hint { margin-top: 12px; color: #C9A66B; font-size: 12px; letter-spacing: 0.3em; }
+
+  .cafe-icon { font-size: 32px; }
+  h2.section-title { font-size: 24px; margin: 0; }
+  .desc { color: #9FB0A6; font-size: 14px; line-height: 1.7; margin: 0; }
+  .divider { width: 100%; height: 1px; background: #3A4A42; margin: 8px 0; }
+  .note { color: #7C8C82; font-size: 12px; letter-spacing: 0.1em; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; background: #4A6B4D; color: #F0EBDD;
+    font-size: 14px; letter-spacing: 0.05em; border: none; cursor: pointer;
+  }
+  .btn-primary:active { background: #5A7B5D; }
+
+  .studio-head { display: flex; align-items: center; gap: 8px; color: #C9A66B; }
+  .class-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+  .class-card {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: #1F3348; border: 1px solid #2E4A3E;
+    cursor: pointer; text-align: left;
+  }
+  .class-card:active { border-color: #C9A66B; }
+  .class-name { font-size: 16px; margin: 0 0 4px 0; }
+  .class-meta { font-size: 12px; color: #7C8C82; margin: 0; letter-spacing: 0.05em; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: #7C8C82; font-size: 12px; margin-top: 8px; cursor: pointer;
+  }
+
+  .now-playing { font-size: 12px; letter-spacing: 0.3em; color: #C9A66B; margin: 0; }
+
+  .video-card {
+    position: relative; width: 100%; aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1F3348, #0F1B28);
+    border: 1px solid #2E4A3E;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    cursor: pointer;
+  }
+  .play-circle {
+    width: 64px; height: 64px; border-radius: 999px; background: rgba(201,166,107,0.9);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-card span { font-size: 12px; letter-spacing: 0.15em; }
+
+  .timer { display: flex; align-items: center; gap: 12px; color: #9FB0A6; font-size: 14px; }
+  .timer .dim { color: #5A6A62; }
+
+  .end-btn {
+    padding: 14px 28px; background: #243A52; border: 1px solid #2E4A3E; color: #E9DEC0;
+    font-size: 14px; letter-spacing: 0.05em; cursor: pointer;
+  }
+  .end-btn:active { border-color: #C9A66B; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <section class="screen active" id="screen-exterior">
+    <h1 class="title mincho">Anicca Yoga</h1>
+    <p class="subtitle">アニッチャヨガ ― とある路地裏、灯りの点る二階建て</p>
+    <button class="plain" onclick="goTo('cafe')">
+      <svg width="240" height="280" viewBox="0 0 260 300">
+        <polygon points="20,70 130,20 240,70" fill="#2E4A3E" />
+        <polygon points="10,72 130,15 250,72 250,80 10,80" fill="#1D3229" />
+        <rect x="30" y="80" width="200" height="105" fill="#243A52" stroke="#0F1B28" stroke-width="3" />
+        <rect x="50" y="105" width="45" height="55" rx="2" fill="#E8C878" opacity="0.9" />
+        <rect x="165" y="105" width="45" height="55" rx="2" fill="#E8C878" opacity="0.7" />
+        <text x="130" y="145" text-anchor="middle" font-size="11" fill="#C9A66B" font-family="'Shippori Mincho', serif">studio ・2F</text>
+        <rect x="30" y="185" width="200" height="100" fill="#3A2E22" stroke="#0F1B28" stroke-width="3" />
+        <rect x="50" y="205" width="160" height="45" rx="2" fill="#F0EBDD" opacity="0.85" />
+        <text x="130" y="232" text-anchor="middle" font-size="11" fill="#3A2E22" font-family="'Shippori Mincho', serif">cafe ・1F</text>
+        <rect x="115" y="250" width="30" height="35" fill="#0F1B28" />
+        <circle cx="140" cy="267" r="1.6" fill="#E8C878" />
+      </svg>
+      <p class="enter-hint">扉を開ける →</p>
+    </button>
+  </section>
+
+  <section class="screen" id="screen-cafe">
+    <div class="cafe-icon">☕</div>
+    <h2 class="section-title mincho">1階・Anicca Cafe</h2>
+    <p class="desc">木の匙が触れる音だけが響く店内。奥の階段が、2階のスタジオへ続いている。</p>
+    <div class="divider"></div>
+    <p class="note">本日のおすすめ ― 生姜と柚子のホットドリンク</p>
+    <button class="btn-primary" onclick="goTo('studio')">↑ 階段をのぼる</button>
+  </section>
+
+  <section class="screen" id="screen-studio">
+    <div class="studio-head">
+      <span>🔥</span>
+      <h2 class="section-title mincho">2階・スタジオ</h2>
+    </div>
+    <p class="desc">灯りの下、四枚のマットが並んでいる。座りたい場所を選ぶ。</p>
+    <div class="class-list" id="class-list"></div>
+    <div class="back-link" onclick="goTo('cafe')">← カフェへ戻る</div>
+  </section>
+
+  <section class="screen" id="screen-session">
+    <p class="now-playing">NOW PLAYING</p>
+    <h2 class="section-title mincho" id="session-title"></h2>
+    <div class="video-card" id="video-card">
+      <div class="play-circle">▶</div>
+      <span>YouTubeで再生 ↗</span>
+    </div>
+    <div class="timer">
+      <span id="timer-display">00:00</span>
+      <span class="dim" id="timer-total"></span>
+    </div>
+    <button class="end-btn" onclick="goTo('studio')">レッスンを終えてマットを出る</button>
+  </section>
+
+</div>
+
+<script>
+  var CLASSES = [
+    { id: 1, name: "朝陽のヴィンヤサ", level: "初級", minutes: 12, mood: "からだを起こす", youtubeId: "rxfT1uRG3wA" },
+    { id: 2, name: "月夜のリストラティブ", level: "初級", minutes: 18, mood: "深く緩める", youtubeId: "rtmtDIxitME" },
+    { id: 3, name: "根を張るハタ", level: "中級", minutes: 20, mood: "軸を整える", youtubeId: "E40UuweGD1Y" },
+    { id: 4, name: "静寂のバランス", level: "上級", minutes: 25, mood: "集中を研ぐ", youtubeId: "ArjvegaWtms" }
+  ];
+
+  var timerInterval = null;
+  var elapsed = 0;
+
+  function renderClassList() {
+    var list = document.getElementById('class-list');
+    list.innerHTML = '';
+    CLASSES.forEach(function (c) {
+      var card = document.createElement('div');
+      card.className = 'class-card';
+      card.onclick = function () { openSession(c); };
+      card.innerHTML =
+        '<div>' +
+          '<p class="class-name mincho">' + c.name + '</p>' +
+          '<p class="class-meta">' + c.level + ' ・ ' + c.minutes + '分 ・ ' + c.mood + '</p>' +
+        '</div>' +
+        '<span>🚪</span>';
+      list.appendChild(card);
+    });
+  }
+
+  function openSession(cls) {
+    document.getElementById('session-title').textContent = cls.name;
+    document.getElementById('timer-total').textContent = '/ ' + cls.minutes + ':00';
+    document.getElementById('video-card').onclick = function () {
+      window.open('https://www.youtube.com/watch?v=' + cls.youtubeId, '_blank');
+    };
+    elapsed = 0;
+    updateTimerDisplay();
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(function () {
+      elapsed += 1;
+      updateTimerDisplay();
+    }, 1000);
+    goTo('session');
+  }
+
+  function updateTimerDisplay() {
+    var mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    var ss = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = mm + ':' + ss;
+  }
+
+  function goTo(name) {
+    document.querySelectorAll('.screen').forEach(function (el) { el.classList.remove('active'); });
+    document.getElementById('screen-' + name).classList.add('active');
+    if (name !== 'session' && timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  renderClassList();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      regs.forEach(function (reg) { reg.unregister(); });
+    });
+  }
+</script>
+</body>
+</html>
